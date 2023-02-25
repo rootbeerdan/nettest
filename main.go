@@ -3,8 +3,8 @@ package main
 import (
 	"time"
 
+	"github.com/go-ping/ping"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/sparrc/go-ping"
 )
 
 var (
