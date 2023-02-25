@@ -3,12 +3,15 @@ package main
 import (
 	"time"
 
+	"net/http"
+
 	"github.com/go-ping/ping"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 var (
-	fqdn = []string{"google.com", "example.com", "github.com"}
+	fqdn = []string{"test-v4.maymobility.com", "test-v6.maymobility.com", "zero-trust-client.cloudflareclient.com", "ipv6.google.com", "ipv4.google.com"}
 )
 
 func main() {
@@ -51,5 +54,11 @@ func main() {
 			pinger.Run()
 		}
 		time.Sleep(time.Second * 30)
+	}
+
+	http.Handle("/metrics", promhttp.Handler())
+	err := http.ListenAndServe(":8081", nil)
+	if err != nil {
+		panic(err)
 	}
 }
