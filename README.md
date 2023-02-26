@@ -12,3 +12,7 @@ Tested on Windows 11, however it should work on Linux and macOS as a privileged 
 ## Issues & feature requests
 
 Feel free to open up a ticket, but this was a one-off thing and I'm pretty busy these days.
+
+## Known issues
+
+- Program will show endpoint success if either IPv4 or IPv6 endpoint is working, which may not be desirable. Remediated by using single stack endpoints like ipv4.google.com and ipv6.google.com.
