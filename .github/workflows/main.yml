@@ -7,7 +7,7 @@ env:
   GOARCH: amd64
 
 jobs:
-  build:
+  build-windows-x86-64:
     name: Compile for Windows/x86-64
     if: startsWith(github.ref, 'refs/heads/')
     runs-on: windows-latest
@@ -29,7 +29,7 @@ jobs:
       run: |
         go build -o nettest.exe
 
-  build:
+  build-windows-arm64:
     name: Compile for Windows/arm64
     if: startsWith(github.ref, 'refs/heads/')
     runs-on: windows-latest
@@ -51,7 +51,7 @@ jobs:
       run: |
         go build -o nettest.exe
 
-  build:
+  build-ubuntu-x86-64:
     name: Compile for Ubuntu/x86-64
     if: startsWith(github.ref, 'refs/heads/')
     runs-on: ubuntu-latest
@@ -73,7 +73,7 @@ jobs:
       run: |
         go build -o nettest
 
-  build:
+  build-ubuntu-arm64:
     name: Compile for Ubuntu/arm64
     if: startsWith(github.ref, 'refs/heads/')
     runs-on: ubuntu-latest
