@@ -1,0 +1,96 @@
+name: Compile for Windows and Ubuntu
+
+on: [push]
+
+env:
+  GOOS: linux
+  GOARCH: amd64
+
+jobs:
+  build:
+    name: Compile for Windows/x86-64
+    if: startsWith(github.ref, 'refs/heads/')
+    runs-on: windows-latest
+
+    env:
+      GOOS: windows
+      GOARCH: amd64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: latest
+
+    - name: Compile
+      run: |
+        go build -o nettest.exe
+
+  build:
+    name: Compile for Windows/arm64
+    if: startsWith(github.ref, 'refs/heads/')
+    runs-on: windows-latest
+
+    env:
+      GOOS: windows
+      GOARCH: arm64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: latest
+
+    - name: Compile
+      run: |
+        go build -o nettest.exe
+
+  build:
+    name: Compile for Ubuntu/x86-64
+    if: startsWith(github.ref, 'refs/heads/')
+    runs-on: ubuntu-latest
+
+    env:
+      GOOS: linux
+      GOARCH: amd64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: latest
+
+    - name: Compile
+      run: |
+        go build -o nettest
+
+  build:
+    name: Compile for Ubuntu/arm64
+    if: startsWith(github.ref, 'refs/heads/')
+    runs-on: ubuntu-latest
+
+    env:
+      GOOS: linux
+      GOARCH: arm64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: latest
+
+    - name: Compile
+      run: |
+        go build -o nettest
