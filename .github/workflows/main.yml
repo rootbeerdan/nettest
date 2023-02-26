@@ -1,64 +1,45 @@
-name: Compile for Windows and Ubuntu
+name: Compile and Upload Artifacts
 
-on: [push]
-
-env:
-  GOOS: linux
-  GOARCH: amd64
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  build-windows-x86-64:
-    name: Compile for Windows/x86-64
-    if: startsWith(github.ref, 'refs/heads/')
-    runs-on: windows-latest
-
-    env:
-      GOOS: windows
-      GOARCH: amd64
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: '^1.20.1'
-
-    - name: Compile
-      run: |
-        go build -o nettest.exe
-
-  build-windows-arm64:
-    name: Compile for Windows/arm64
-    if: startsWith(github.ref, 'refs/heads/')
-    runs-on: windows-latest
-
-    env:
-      GOOS: windows
-      GOARCH: arm64
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: '^1.20.1'
-
-    - name: Compile
-      run: |
-        go build -o nettest.exe
-
-  build-ubuntu-x86-64:
-    name: Compile for Ubuntu/x86-64
-    if: startsWith(github.ref, 'refs/heads/')
+  build-linux:
+    name: Build Linux Binaries
     runs-on: ubuntu-latest
 
-    env:
-      GOOS: linux
-      GOARCH: amd64
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.20.1
+
+    - name: Compile for Ubuntu x86-64
+      run: |
+        GOOS=linux GOARCH=amd64 go build -o nettest-linux-x86-64
+
+    - name: Compile for Ubuntu arm64
+      run: |
+        GOOS=linux GOARCH=arm64 go build -o nettest-linux-arm64
+
+    - name: Archive Linux Binaries
+      run: |
+        tar -czvf nettest-linux-binaries.tar.gz nettest-linux-x86-64 nettest-linux-arm64
+
+    - name: Upload Linux Binaries
+      uses: actions/upload-artifact@v2
+      with:
+        name: nettest-linux-binaries
+        path: nettest-linux-binaries.tar.gz
+
+  build-windows:
+    name: Build Windows Binaries
+    runs-on: windows-latest
 
     steps:
     - name: Checkout code
@@ -67,30 +48,22 @@ jobs:
     - name: Set up Go
       uses: actions/setup-go@v2
       with:
-        go-version: '^1.20.1'
+        go-version: 1.20.1
 
-    - name: Compile
+    - name: Compile for Windows x86-64
       run: |
-        go build -o nettest
+        GOOS=windows GOARCH=amd64 go build -o nettest-windows-x86-64.exe
 
-  build-ubuntu-arm64:
-    name: Compile for Ubuntu/arm64
-    if: startsWith(github.ref, 'refs/heads/')
-    runs-on: ubuntu-latest
+    - name: Compile for Windows arm64
+      run: |
+        GOOS=windows GOARCH=arm64 go build -o nettest-windows-arm64.exe
 
-    env:
-      GOOS: linux
-      GOARCH: arm64
+    - name: Archive Windows Binaries
+      run: |
+        tar -czvf nettest-windows-binaries.tar.gz nettest-windows-x86-64.exe nettest-windows-arm64.exe
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Go
-      uses: actions/setup-go@v2
+    - name: Upload Windows Binaries
+      uses: actions/upload-artifact@v2
       with:
-        go-version: '^1.20.1'
-
-    - name: Compile
-      run: |
-        go build -o nettest
+        name: nettest-windows-binaries
+        path: nettest-windows-binaries.tar.gz
