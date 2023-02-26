@@ -3,7 +3,7 @@ name: Compile and Upload Artifacts
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build-linux:
@@ -52,11 +52,15 @@ jobs:
 
     - name: Compile for Windows x86-64
       run: |
-        GOOS=windows GOARCH=amd64 go build -o nettest-windows-x86-64.exe
+        set GOOS=windows
+        set GOARCH=amd64
+        go build -o nettest-windows-x86-64.exe
 
     - name: Compile for Windows arm64
       run: |
-        GOOS=windows GOARCH=arm64 go build -o nettest-windows-arm64.exe
+        set GOOS=windows
+        set GOARCH=arm64
+        go build -o nettest-windows-arm64.exe
 
     - name: Archive Windows Binaries
       run: |
