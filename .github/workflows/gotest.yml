@@ -1,0 +1,27 @@
+name: Test on Merge Request
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+env:
+  GOOS: linux
+  GOARCH: amd64
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ^1.20.1
+
+    - name: Run tests
+      run: |
+        go test -v
