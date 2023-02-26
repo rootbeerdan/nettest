@@ -1,11 +1,10 @@
-FROM registry.ipv6.docker.com/library/golang:alpine
-
+FROM registry.ipv6.docker.com/library/golang:alpine AS builder
 WORKDIR /app
-
 COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -o app
 
-RUN go build -o nettest
-
-EXPOSE 8081
-
-ENTRYPOINT ["./nettest"]
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /root/
+COPY --from=builder /app/app .
+CMD ["./app"]
